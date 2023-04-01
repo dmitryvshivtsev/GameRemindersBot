@@ -87,4 +87,4 @@ def send_date_of_match(team_on_russian: str) -> str:
 
     for i in new_football_clubs:
         if i.name.lower() == input_club:
-            return f"Ближайшая игра клуба {i.name} состоится {validation(i.tag)}"
+            return f"Ближайшая игра клуба {i.name} состоится {validation(i.tag)} (МСК)"

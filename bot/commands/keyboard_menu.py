@@ -1,8 +1,7 @@
 from aiogram import types
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder, InlineKeyboardMarkup, InlineKeyboardButton
-from bot.commands.parsing import validation
-# from bot.commands.get_info import
+# from bot.parsing.parsing import validation
 
 
 async def sport_keyboard(message: types.Message) -> None:

@@ -4,6 +4,7 @@ import logging
 from aiogram import Dispatcher, Bot
 from aiogram.types import BotCommand
 from commands import register_user_commands, bot_commands, menu_inline
+from bot.database.db_connection import Database
 
 
 async def main() -> None:
@@ -15,6 +16,8 @@ async def main() -> None:
 
     dp = Dispatcher()
     bot = Bot(token=os.getenv('token'))
+
+    db = Database('bot/database/db')
 
     await bot.set_my_commands(commands=commands_for_bot)
 
