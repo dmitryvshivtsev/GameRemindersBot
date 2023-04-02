@@ -1,10 +1,10 @@
+from typing import Union
+
 from aiogram import types
 from aiogram.filters import Command
 
+from keyboards.inline import types_keyboard, league_keyboard, teams_keyboard
+
 
 async def show_menu(message: types.Message):
-    await list_types_of_sport(message)
-
-
-async def list_types_of_sport(message: [types.Message, types.CallbackQuery], **kwargs):
-    markup = await types_keyboard()
+    await types_keyboard(message)

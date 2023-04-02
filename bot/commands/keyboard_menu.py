@@ -50,7 +50,7 @@ async def set_football_team(call: types.CallbackQuery):
         callback_data="everton"
     )
     builder.adjust(1)
-    await call.message.answer(
+    await call.message.edit_reply_markup(
         "Выбери команду",
         reply_markup=builder.as_markup()
     )

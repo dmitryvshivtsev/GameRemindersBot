@@ -6,14 +6,17 @@ from aiogram import Router, F
 from aiogram.filters import Command
 from aiogram.filters import Text
 
+from database.db_connection import Database
 # from bot.commands.parsing import validation
 from start import start
-from keyboard_menu import sport_keyboard, set_football_team, set_hockey_team, call_edit_sport
 from menu.inline_menu import show_menu
+from menu.inline_menu import league_keyboard, teams_keyboard, types_keyboard
 from get_info import get_date
 from register import registration
 from register import bot_msg
 from help import help_call
+
+
 
 bot_commands = (
     ("start", "Нажми, чтобы начать", "Команда, которая начнет диалог и вывыедет навигацию по боту"),
@@ -27,13 +30,17 @@ bot_commands = (
 # Тут будем регистрировать команды пользователя и подключать нужные функции
 def register_user_commands(router: Router) -> None:
     router.message.register(start, Command(commands=['start']))
-    router.message.register(show_menu, Command(commands=['edit_team']))
+    router.message.register(types_keyboard, Command(commands=['edit_team']))
     router.message.register(get_date, Command(commands=['get_date']))
     router.message.register(registration, Command(commands=['reg']))
     router.message.register(help_call, Command(commands=['help']))
     router.message.register(bot_msg, F)
 
 
+db = Database('bot/database/db')
+
+
 def menu_inline(router: Router) -> None:
-    router.callback_query.register(set_football_team, F.data == "football")
-    router.callback_query.register(set_hockey_team, F.data == "hockey")
+    arr = ["КХЛ", "РПЛ", "Единая лига ВТБ"]
+    router.callback_query.register(league_keyboard)
+    router.callback_query.register(teams_keyboard)

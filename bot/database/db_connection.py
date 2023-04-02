@@ -35,4 +35,21 @@ class Database:
 
     async def get_types(self):
         with self.connection:
-            result = self.connection
+            query = self.cursor.execute("SELECT DISTINCT `kind_of_sport` FROM `teams`").fetchall()
+            result = []
+            [result.append(*res) for res in query]
+            return result
+
+    async def get_leagues(self, type):
+        with self.connection:
+            query = self.cursor.execute("SELECT DISTINCT `league` FROM `teams` WHERE `kind_of_sport` = ?", (type,)).fetchall()
+            result = []
+            [result.append(*res) for res in query]
+            return result
+
+    async def get_teams(self, league):
+        with self.connection:
+            query = self.cursor.execute("SELECT DISTINCT `team` FROM `teams` WHERE `league` = ?", (league,)).fetchall()
+            result = []
+            [result.append(*res) for res in query]
+            return result
