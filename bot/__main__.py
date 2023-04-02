@@ -22,7 +22,7 @@ async def main() -> None:
     await bot.set_my_commands(commands=commands_for_bot)
 
     register_user_commands(dp)
-    menu_inline(dp)
+    await menu_inline(dp)
 
     await dp.start_polling(bot)
 

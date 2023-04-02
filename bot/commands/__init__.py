@@ -10,7 +10,7 @@ from database.db_connection import Database
 # from bot.commands.parsing import validation
 from start import start
 from menu.inline_menu import show_menu
-from menu.inline_menu import league_keyboard, teams_keyboard, types_keyboard
+from menu.inline_menu import league_keyboard, teams_keyboard, types_keyboard, choose_keyboard
 from get_info import get_date
 from register import registration
 from register import bot_msg
@@ -40,7 +40,5 @@ def register_user_commands(router: Router) -> None:
 db = Database('bot/database/db')
 
 
-def menu_inline(router: Router) -> None:
-    arr = ["КХЛ", "РПЛ", "Единая лига ВТБ"]
-    router.callback_query.register(league_keyboard)
-    router.callback_query.register(teams_keyboard)
+async def menu_inline(router: Router) -> None:
+    router.callback_query.register(choose_keyboard)
