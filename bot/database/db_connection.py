@@ -24,7 +24,8 @@ class Database:
 
     async def set_favourite_team(self, user_id, favourite_team):
         with self.connection:
-            return self.cursor.execute("UPDATE `users` SET `team_id` = (SELECT `id` FROM `teams` WHERE `team` = ?) WHERE `user_id` = ?", (favourite_team, user_id,))
+            return self.cursor.execute("UPDATE `users` SET `team_id` = (SELECT `id` FROM `teams` WHERE `team` = ?) "
+                                       "WHERE `user_id` = ?", (favourite_team, user_id,))
 
     def get_user_id(self, nickname):
         with self.connection:

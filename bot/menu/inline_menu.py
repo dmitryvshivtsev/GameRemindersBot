@@ -1,7 +1,7 @@
 from aiogram import types
 
 from database.db_connection import Database
-from keyboards.inline import types_keyboard
+from keyboards.inline import types_keyboard, choose_keyboard
 
 
 async def show_menu(message: types.Message):
