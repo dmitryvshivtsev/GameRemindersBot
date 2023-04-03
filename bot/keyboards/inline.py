@@ -3,7 +3,7 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 from database.db_connection import Database
 
 
-db = Database('bot/database/db')
+db = Database('/home/PySportBot/bot/database/db')
 
 
 async def types_keyboard(message: types.Message):
