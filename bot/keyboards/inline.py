@@ -40,7 +40,8 @@ async def choose_keyboard(call: types.CallbackQuery):
         builder.adjust(1)
         if callback in await db.get_teams(prev):
             await db.set_favourite_team(user_id=call.from_user.id, favourite_team=call.data)
-            await call.message.edit_text(text="Я запомнил твою любимую команду!:)")
+            await call.message.edit_text(text=f"Ты болеешь за {callback}. Круто!\nЯ это запомнил и буду тебя "
+                                              f"уведомлять о предстоящих матчах :)")
         else:
             await call.message.edit_text(
                 text=f"Ты выбрал {callback}. Теперь выбери команду",
