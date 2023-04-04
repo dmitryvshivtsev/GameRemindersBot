@@ -4,6 +4,7 @@ import logging
 from aiogram import Dispatcher, Bot
 from aiogram.types import BotCommand
 from commands import register_user_commands, bot_commands, menu_inline
+from database.db_connection import Database
 
 
 async def main() -> None:
@@ -14,12 +15,14 @@ async def main() -> None:
         commands_for_bot.append(BotCommand(command=cmd[0], description=cmd[1]))
 
     dp = Dispatcher()
-    bot = Bot(token=os.getenv('token'))
+    bot = Bot(token=os.getenv('TOKEN'))
+
+    db = Database()
 
     await bot.set_my_commands(commands=commands_for_bot)
 
     register_user_commands(dp)
-    menu_inline(dp)
+    await menu_inline(dp)
 
     await dp.start_polling(bot)
 

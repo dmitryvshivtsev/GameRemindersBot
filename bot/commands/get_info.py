@@ -1,14 +1,6 @@
 from aiogram import types
 from aiogram.filters import CommandObject
-from bot.commands.parsing import send_date_of_match
-
-
-async def get_sport():
-    pass
-
-
-async def get_teams():
-    pass
+from parsing.parsing import send_date_of_match
 
 
 async def get_date(message: types.Message, command: CommandObject) -> None:
