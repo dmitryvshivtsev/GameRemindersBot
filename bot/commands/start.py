@@ -14,5 +14,5 @@ async def start(message: types.Message) -> None:
                          '2) Чтобы узнать информацию о ближайшем матче, введи команду `/get_date название_команды`\n\n'
                          'Удачи! :)')
     if not (db.user_exists(message.from_user.id)):
-        await message.answer(f'Мы запомнили твое имя :)\nТеперь нужно узнать твой любимый вид спорта и команду. Для этого вызови команду /edit_team')
+        await message.answer(f'\nМне нужно узнать твой любимый вид спорта и команду. Для этого вызови команду /edit_team')
         db.add_user(message.from_user.id, message.from_user.username)
