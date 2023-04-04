@@ -1,10 +1,12 @@
+import os
+
 from aiogram import types
 
-from database import db_connection
+from database.db_connection import Database
 
 
 async def start(message: types.Message) -> None:
-    db = db_connection.Database('bot/database/db')
+    db = Database()
 
     await message.answer(f'Привет, {message.chat.first_name}! Добро пожаловать в бота, который не позволит тебе пропустить игру любимой'
                          ' команды!'

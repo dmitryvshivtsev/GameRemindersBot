@@ -1,14 +1,16 @@
 __all__ = ['register_user_commands', 'bot_commands']
 
+import os
+
 from aiogram import Router
 from aiogram.filters import Command
 
 from database.db_connection import Database
-from get_info import get_date
+from commands.get_info import get_date
 # from register import bot_msg
-from help import help_call
-from menu.inline_menu import types_keyboard, choose_keyboard
-from start import start
+from commands.help import help_call
+from keyboards.inline_menu import types_keyboard, choose_keyboard
+from commands.start import start
 
 bot_commands = (
     ("start", "Нажми, чтобы начать", "Команда, которая начнет диалог и вывыедет навигацию по боту"),
@@ -28,7 +30,7 @@ def register_user_commands(router: Router) -> None:
     # router.message.register(bot_msg, F)
 
 
-db = Database('bot/database/db')
+db = Database()
 
 
 async def menu_inline(router: Router) -> None:

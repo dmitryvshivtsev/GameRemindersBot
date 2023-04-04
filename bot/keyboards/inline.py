@@ -1,9 +1,11 @@
+import os
+
 from aiogram import types
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 from database.db_connection import Database
 
 
-db = Database('/home/PySportBot/bot/database/db')
+db = Database()
 
 
 async def types_keyboard(message: types.Message):
@@ -25,7 +27,7 @@ async def choose_keyboard(call: types.CallbackQuery):
     callback = call.data
     if call.data in await db.get_types():
         prev = callback
-        leagues = await db.get_leagues(callback)
+        leagues = await db.get_leagues(kind=callback)
         for league in leagues:
             builder.button(text=league, callback_data=league)
         builder.adjust(1)
@@ -39,7 +41,7 @@ async def choose_keyboard(call: types.CallbackQuery):
             builder.button(text=team, callback_data=team)
         builder.adjust(1)
         if callback in await db.get_teams(prev):
-            await db.set_favourite_team(user_id=call.from_user.id, favourite_team=call.data)
+            await db.set_favourite_team(tg_id=call.from_user.id, favourite_team=call.data)
             await call.message.edit_text(text=f"Ты болеешь за {callback}. Круто!\nЯ это запомнил и буду тебя "
                                               f"уведомлять о предстоящих матчах :)")
         else:

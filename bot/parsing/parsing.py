@@ -40,7 +40,6 @@ def validation(team):
         if len(dat) > 1 or not dat[0].isalpha():
             elems = dat[0].split('.')
             if not elems[0].isalpha():
-                # cur_year, cur_month, cur_day = int(elems[2]), int(elems[1]), int(elems[0])
                 cur_day, cur_month, cur_year = map(int, elems)
                 parsed_date = date(cur_year, cur_month, cur_day)
                 if (parsed_date.month == now.month and parsed_date.day >= now.day) or \
