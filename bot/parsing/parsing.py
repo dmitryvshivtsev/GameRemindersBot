@@ -3,6 +3,8 @@ import requests
 import lxml
 from datetime import datetime, date
 
+from database.db_connection import Database
+
 
 class Team:
 
@@ -12,19 +14,19 @@ class Team:
         self.tag = tag
 
 
-def parse_clubs(clubs: list, sport: str):
-    for n in range(1, 4):
-        url = f'https://www.sports.ru/{sport}/club/?page={n}'
-        response = requests.get(url=url)
-        response.encoding = 'utf-8'
-        soup = BeautifulSoup(response.text, 'lxml')
-        td = [x.text for x in soup.find_all('a', class_='name')]
-        links = [x['href'][22:-1] for x in soup.find_all('a', class_='name')]
-        [clubs.append((sport, td[i], links[i])) for i in range(len(td))]
-    return clubs
+# def parse_clubs(clubs: list, sport: str):
+#     for n in range(1, 4):
+#         url = f'https://www.sports.ru/{sport}/club/?page={n}'
+#         response = requests.get(url=url)
+#         response.encoding = 'utf-8'
+#         soup = BeautifulSoup(response.text, 'lxml')
+#         td = [x.text for x in soup.find_all('a', class_='name')]
+#         links = [x['href'][22:-1] for x in soup.find_all('a', class_='name')]
+#         [clubs.append((sport, td[i], links[i])) for i in range(len(td))]
+#     return clubs
 
 
-def validation(team):
+async def validation(team):
     url = f'https://www.sports.ru/{team}/calendar'
     response = requests.get(url=url)
     response.encoding = 'utf-8'
@@ -76,14 +78,19 @@ def parse_score(soup):
     return scores
 
 
-def send_date_of_match(team_on_russian: str) -> str:
-    football_clubs = []
-    parse_clubs(football_clubs, 'football')
-    new_football_clubs = []
-    [new_football_clubs.append(Team(case[0], case[1], case[2])) for case in football_clubs]
+# def send_date_of_match(team_on_russian: str, kind_of_sport: str) -> str:
+#     clubs = []
+#     kinds_of_sport = {'Футбол':'football', 'Баскетбол':'basketball', 'Хоккей':'hockey'}
+#     kind =
+#     parse_clubs(clubs, 'football')
+#     new_football_clubs = []
+#     [new_football_clubs.append(Team(case[0], case[1], case[2])) for case in clubs]
+#
+#     input_club = team_on_russian.strip().lower()
+#
+#     for i in new_football_clubs:
+#         if i.name.lower() == input_club:
+#             return f"Ближайшая игра клуба {i.name} состоится {validation(i.tag)} (МСК)"
 
-    input_club = team_on_russian.strip().lower()
-
-    for i in new_football_clubs:
-        if i.name.lower() == input_club:
-            return f"Ближайшая игра клуба {i.name} состоится {validation(i.tag)} (МСК)"
+async def send_date_of_match(club, team_tag) -> str:
+    return f"Ближайшая игра клуба {club} состоится {await validation(team_tag)} (МСК)"

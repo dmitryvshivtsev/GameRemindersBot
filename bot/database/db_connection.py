@@ -33,6 +33,10 @@ class Database:
             return self.cursor.execute("UPDATE users SET team_id = (SELECT id FROM teams WHERE team = %s) "
                                        "WHERE tg_id = %s;", (favourite_team, tg_id,))
 
+    async def get_favourite_team(self, tg_id):
+        with self.connection:
+            return self.cursor.execute("SELECT team FROM teams WHERE tg_id = %s;", (tg_id,))
+
     async def get_user_id(self, tg_username):
         with self.connection:
             self.cursor.execute("SELECT tg_id FROM users WHERE tg_username = %s;", (tg_username,))
@@ -63,4 +67,12 @@ class Database:
             result = []
             query = self.cursor.fetchall()
             [result.append(*res) for res in query]
+            return result
+
+    async def get_tag(self, tg_id):
+        with self.connection:
+            self.cursor.execute("SELECT DISTINCT team, team_tag FROM teams WHERE id = (SELECT team_id FROM users WHERE tg_id = %s);", (tg_id,))
+            result = []
+            query = self.cursor.fetchall()
+            [result.append(i) for res in query for i in res]
             return result
