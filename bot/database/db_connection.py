@@ -22,18 +22,18 @@ class Database:
         with self.connection:
             return self.cursor.execute("INSERT INTO users (tg_id, tg_username) VALUES (%s, %s);", (tg_id, tg_username,))
 
-    def user_exists(self, tg_id):
-        with self.connection:
-            self.cursor.execute("SELECT * FROM users WHERE tg_id = %s;", (tg_id,))
-            result = self.cursor.fetchall()
-            return bool(len(result))
+    async def user_exists(self, tg_id):
+        async with self.connection:
+            await self.cursor.execute("SELECT * FROM users WHERE tg_id = %s;", (tg_id,))
+            result = len(self.cursor.fetchall())
+            return bool(result)
 
     async def set_favourite_team(self, tg_id, favourite_team):
         with self.connection:
             return self.cursor.execute("UPDATE users SET team_id = (SELECT id FROM teams WHERE team = %s) "
                                        "WHERE tg_id = %s;", (favourite_team, tg_id,))
 
-    def get_user_id(self, tg_username):
+    async def get_user_id(self, tg_username):
         with self.connection:
             self.cursor.execute("SELECT tg_id FROM users WHERE tg_username = %s;", (tg_username,))
             result = self.cursor.fetchall()
