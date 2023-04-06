@@ -26,7 +26,7 @@ class Team:
 #     return clubs
 
 
-async def validation(team):
+def validation(team):
     url = f'https://www.sports.ru/{team}/calendar'
     response = requests.get(url=url)
     response.encoding = 'utf-8'
@@ -92,5 +92,5 @@ def parse_score(soup):
 #         if i.name.lower() == input_club:
 #             return f"Ближайшая игра клуба {i.name} состоится {validation(i.tag)} (МСК)"
 
-async def send_date_of_match(club, team_tag) -> str:
-    return f"Ближайшая игра клуба {club} состоится {await validation(team_tag)} (МСК)"
+def send_date_of_match(club, team_tag) -> str:
+    return f"Ближайшая игра клуба {club} состоится {validation(team_tag)} (МСК)"

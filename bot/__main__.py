@@ -1,11 +1,15 @@
 import os
 import asyncio
 import logging
-from asyncio import create_task
+import schedule
+import time
+import threading
 
+from asyncio import create_task
 from aiogram import Dispatcher, Bot
 from aiogram.types import BotCommand
 from commands import register_user_commands, bot_commands, menu_inline
+from commands.get_info import auto_get_date
 from database.db_connection import Database
 
 
@@ -20,25 +24,30 @@ async def main() -> None:
     bot = Bot(token=os.getenv('TOKEN'))
 
     set_commands = create_task(bot.set_my_commands(commands=commands_for_bot))
-    # await bot.set_my_commands(commands=commands_for_bot)
     db = Database()
 
     await set_commands
 
     menu = create_task(menu_inline(dp))
-
-    start_poll = dp.start_polling(bot)
+    start_poll = create_task(dp.start_polling(bot))
 
     register_user_commands(dp)
-    # await menu_inline(dp)
-    # await dp.start_polling(bot)
 
     await menu
     await start_poll
 
 
+def schedulers_checker() -> None:
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
+
+
 if __name__ == "__main__":
     try:
+        schedule.every().day.at("9:00").do(auto_get_date)
+        schedule.every().day.at("21:00").do(auto_get_date)
+        threading.Thread(target=schedulers_checker).start()
         asyncio.run(main())
     except (KeyboardInterrupt, SystemExit):
         print('Bot stopped')

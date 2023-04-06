@@ -23,8 +23,8 @@ class Database:
             return self.cursor.execute("INSERT INTO users (tg_id, tg_username) VALUES (%s, %s);", (tg_id, tg_username,))
 
     async def user_exists(self, tg_id):
-        async with self.connection:
-            await self.cursor.execute("SELECT * FROM users WHERE tg_id = %s;", (tg_id,))
+        with self.connection:
+            self.cursor.execute("SELECT * FROM users WHERE tg_id = %s;", (tg_id,))
             result = len(self.cursor.fetchall())
             return bool(result)
 
@@ -69,10 +69,18 @@ class Database:
             [result.append(*res) for res in query]
             return result
 
-    async def get_tag(self, tg_id):
+    def get_tag(self, tg_id):
         with self.connection:
             self.cursor.execute("SELECT DISTINCT team, team_tag FROM teams WHERE id = (SELECT team_id FROM users WHERE tg_id = %s);", (tg_id,))
             result = []
             query = self.cursor.fetchall()
             [result.append(i) for res in query for i in res]
+            return result
+
+    def get_tg_id(self):
+        with self.connection:
+            self.cursor.execute("SELECT tg_id FROM users;")
+            result = []
+            query = self.cursor.fetchall()
+            [result.append(*res) for res in query]
             return result
