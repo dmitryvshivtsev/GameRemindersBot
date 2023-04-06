@@ -36,20 +36,20 @@ async def validation(team):
     dates = parse_date(soup)
 
     games_dates = []
-    for dat in dates:
-        # Формат "Дата | Время"
-        dat = dat.split('|')
-        if len(dat) > 1 or not dat[0].isalpha():
-            elems = dat[0].split('.')
+    for date_time in dates:
+        # Формат на сайте лежит в виде "Дата | Время" или "Дата"
+        date_time = date_time.split('|')
+        if len(date_time) > 1 or not date_time[0].isalpha():
+            elems = date_time[0].split('.')
             if not elems[0].isalpha():
                 cur_day, cur_month, cur_year = map(int, elems)
                 parsed_date = date(cur_year, cur_month, cur_day)
                 if (parsed_date.month == now.month and parsed_date.day >= now.day) or \
                         (parsed_date.month > now.month and parsed_date.year >= now.year):
-                    if len(dat) > 1:
-                        games_dates.append(parsed_date.strftime("%d.%m.%Y в ") + dat[1])
+                    if len(date_time) > 1:
+                        return f"{parsed_date.strftime('%d.%m.%Y')} в {date_time[1]}"
                     else:
-                        games_dates.append(parsed_date.strftime("%d.%m.%Y"))
+                        return f"{parsed_date.strftime('%d.%m.%Y')}"
 
     return games_dates[0]
 
