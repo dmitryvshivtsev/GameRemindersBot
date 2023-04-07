@@ -29,7 +29,3 @@ def auto_get_date() -> None:
             url = f"https://api.telegram.org/bot{os.getenv('TOKEN')}/sendMessage?chat_id={id_}&text={'Что-то не так'}"
         requests.get(url)
         time.sleep(1)
-
-
-async def notificate() -> None:
-    schedule.every(1).minute.do(auto_get_date())
