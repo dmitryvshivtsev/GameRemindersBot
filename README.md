@@ -8,9 +8,9 @@
 * Автоматическое напоминание о игре любимой команды пользователя 2 раза в день;
 
 Пример работы бота: \
-<img src="/images/edit_team_1.png" alt="example_bot" width="500"/> \
-<img src="/images/edit_team_2.png" alt="example_bot2" width="500"/> \
-<img src="/images/get_date.png" alt="example_bot3" width="500"/>
+<img src="/images/edit_team_1.png" alt="example_bot" width="600"/> \
+<img src="/images/edit_team_2.png" alt="example_bot2" width="600"/> \
+<img src="/images/get_date.png" alt="example_bot3" width="600"/>
 
 Планируется реализовать:
 * Добавление нескольких клубов в качестве любимых;
