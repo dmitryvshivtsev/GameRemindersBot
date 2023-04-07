@@ -84,3 +84,7 @@ class Database:
             query = self.cursor.fetchall()
             [result.append(*res) for res in query]
             return result
+
+    # def add_commands(self, sport, league, team, tag):
+    #     with self.connection:
+    #         return self.cursor.execute("INSERT INTO teams (kind_of_sport, league, team, team_tag) VALUES (%s, %s, %s, %s) ON CONFLICT DO NOTHING;", (sport, league, team, tag))

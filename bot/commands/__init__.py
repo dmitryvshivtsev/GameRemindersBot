@@ -6,7 +6,7 @@ from aiogram import Router, F
 from aiogram.filters import Command
 
 from database.db_connection import Database
-from commands.get_info import get_date, notificate
+from commands.get_info import get_date
 from commands.messages import text_msg
 from commands.help import help_call
 from keyboards.inline_menu import types_keyboard, choose_keyboard
