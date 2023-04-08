@@ -47,7 +47,7 @@ class Database:
 
     async def get_types(self):
         with self.connection:
-            self.cursor.execute("SELECT DISTINCT kind_of_sport FROM teams;")
+            self.cursor.execute("SELECT DISTINCT kind_of_sport FROM teams ORDER BY kind_of_sport;")
             result = []
             query = self.cursor.fetchall()
             [result.append(*res) for res in query]
@@ -55,7 +55,7 @@ class Database:
 
     async def get_leagues(self, kind):
         with self.connection:
-            self.cursor.execute("SELECT DISTINCT league FROM teams WHERE kind_of_sport = %s;", (kind,))
+            self.cursor.execute("SELECT DISTINCT league FROM teams WHERE kind_of_sport = %s ORDER BY league;", (kind,))
             query = self.cursor.fetchall()
             result = []
             [result.append(*res) for res in query]
@@ -63,7 +63,7 @@ class Database:
 
     async def get_teams(self, league):
         with self.connection:
-            self.cursor.execute("SELECT DISTINCT team FROM teams WHERE league = %s;", (league,))
+            self.cursor.execute("SELECT DISTINCT team FROM teams WHERE league = %s ORDER BY team;", (league,))
             result = []
             query = self.cursor.fetchall()
             [result.append(*res) for res in query]
