@@ -32,7 +32,7 @@ def validation(club, team_tag):
                 if (parsed_date.month == now.month and parsed_date.day >= now.day) or \
                         (parsed_date.month > now.month and parsed_date.year >= now.year):
                     now_time = datetime.now().strftime("%H:%M")
-                    if date_time[1] < now_time:
+                    if date_time[1] <= now_time:
                         if not is_finish:
                             return f"Матч идет!\nСчет - {club} [{scores[i + 1]}] {opps[i]}"
                         if is_finish:
