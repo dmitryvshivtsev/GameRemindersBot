@@ -31,8 +31,8 @@ def validation(club, team_tag):
                 parsed_date = date(cur_year, cur_month, cur_day)
                 if (parsed_date.month == now.month and parsed_date.day >= now.day) or \
                         (parsed_date.month > now.month and parsed_date.year >= now.year):
-                    # now_time = datetime.now().strftime("%H:%M")
-                    if date_time[1][:2:] <= str(datetime.now().time().hour + 3):
+                    now_time = datetime.now().strftime("%H:%M")
+                    if date_time[1] <= now_time:
                         if not is_finish:
                             return f"Матч идет!\nСчет - {club} [{scores[i + 1]}] {opps[i]}"
                         if is_finish:
