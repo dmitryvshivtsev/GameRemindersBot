@@ -23,4 +23,3 @@
 * Aiogram 3.0.0b6
 * Requests + bs4
 * Docker
-* Schedule
