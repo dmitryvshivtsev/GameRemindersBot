@@ -6,7 +6,7 @@ from datetime import datetime, date
 from database.db_connection import Database
 
 
-def validation(club, team_tag):
+def get_match(club, team_tag):
     url = f'https://www.sports.ru/{team_tag}/calendar'
     response = requests.get(url=url)
     response.encoding = 'utf-8'
@@ -20,7 +20,6 @@ def validation(club, team_tag):
     opps = parse_opp(soup)
     is_finish = finish_game(soup)
 
-    games_dates = []
     for i, date_time in enumerate(dates):
         # Формат на сайте лежит в виде "Дата | Время" или "Дата"
         date_time = date_time.split('|')
@@ -34,16 +33,17 @@ def validation(club, team_tag):
                     now_time = datetime.now().strftime("%H:%M")
                     if date_time[1] <= now_time:
                         if not is_finish:
-                            return f"Матч идет!\nСчет - {club} [{scores[i + 1]}] {opps[i]}"
+                            return f"Матч идет!\nСчет - {club} [{scores[i]}] {opps[i]}"
                         if is_finish:
-                            return f"Крайний матч завершен!\nСчет - {club} [{scores[i + 1]}] {opps[i]}\n\n" \
+                            return f"Крайний матч завершен!\nСчет - {club} [{scores[i]}] {opps[i]}\n\n" \
                                    f"Ближайшая игра клуба {club} против {opps[i]} состоится " \
                                    f"{parsed_date.strftime('%d.%m.%Y')} в {date_time[1]} (По МСК)"
                     elif len(date_time) > 1:
-                        return f"Ближайшая игра клуба {club} против {opps[i]} состоится {parsed_date.strftime('%d.%m.%Y')} в {date_time[1]} (По МСК)"
+                        return f"Ближайшая игра клуба {club} против {opps[i]} состоится" \
+                               f" {parsed_date.strftime('%d.%m.%Y')} в {date_time[1]} (По МСК)"
                     else:
-                        return f"Ближайшая игра клуба {club} против {opps[i]} состоится {parsed_date.strftime('%d.%m.%Y')}"
-    return games_dates[0]
+                        return f"Ближайшая игра клуба {club} против {opps[i]} состоится " \
+                               f"{parsed_date.strftime('%d.%m.%Y')}"
 
 
 def parse_date(soup):
@@ -93,4 +93,4 @@ def check_place(soup, scores):
 
 
 def send_date_of_match(club, team_tag) -> str:
-    return validation(club, team_tag)
+    return get_match(club, team_tag)

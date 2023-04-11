@@ -15,7 +15,7 @@ async def get_date(message: types.Message) -> None:
     try:
         await message.answer(send_date_of_match(club, team_tag))
     except:
-        await message.answer('Не найден матч :(\nУбедись, что ты уже выбрал любимую команду')
+        await message.answer('К сожалению, на ближайшие дни матчей нет. Если появятся, то я тебе сообщу ;)')
 
 
 # @schedule.repeat(schedule.every(10).seconds)
@@ -24,8 +24,12 @@ def auto_get_date() -> None:
     for id_ in db.get_tg_id():
         club, team_tag = db.get_tag(id_)
         try:
-            url = f"https://api.telegram.org/bot{os.getenv('TOKEN')}/sendMessage?chat_id={id_}&text={send_date_of_match(club, team_tag)}"
+            url = f"https://api.telegram.org/bot{os.getenv('TOKEN')}" \
+                  f"/sendMessage?chat_id={id_}&" \
+                  f"text={send_date_of_match(club, team_tag)}"
         except:
-            url = f"https://api.telegram.org/bot{os.getenv('TOKEN')}/sendMessage?chat_id={id_}&text={'Что-то не так'}"
+            url = f"https://api.telegram.org/bot{os.getenv('TOKEN')}" \
+                  f"/sendMessage?chat_id={id_}&" \
+                  f"text={'К сожалению, на ближайшие дни матчей нет. Если появятся, то я тебе сообщу ;)'}"
         requests.get(url)
         time.sleep(1)

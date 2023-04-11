@@ -46,7 +46,7 @@ def schedulers_checker() -> None:
 if __name__ == "__main__":
     try:
         schedule.every().day.at("09:00").do(auto_get_date)
-        # schedule.every().day.at("21:00").do(auto_get_date)
+        schedule.every().day.at("21:00").do(auto_get_date)
         threading.Thread(target=schedulers_checker).start()
         asyncio.run(main())
     except (KeyboardInterrupt, SystemExit):
