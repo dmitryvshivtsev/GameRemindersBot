@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
 import lxml
+import re
 from datetime import datetime, date
 
 from database.db_connection import Database
@@ -15,9 +16,10 @@ def get_match(club, team_tag):
     now = datetime.now()
     dates = parse_date(soup)
 
-    scores = parse_score(soup)
-    scores = check_place(soup, scores)
+    # scores = parse_score(soup)
+    # scores = check_place(soup, scores)
     opps = parse_opp(soup)
+    last_result = last_game_result(soup)
     is_finish = finish_game(soup)
 
     for i, date_time in enumerate(dates):
@@ -33,14 +35,17 @@ def get_match(club, team_tag):
                     now_time = datetime.now().strftime("%H:%M")
                     if date_time[1] <= now_time:
                         if not is_finish:
-                            return f"Матч идет!\nСчет - {club} [{scores[i]}] {opps[i]}"
+                            return f"Матч идет!\nСчет - {last_result}"
                         if is_finish:
-                            return f"Крайний матч завершен!\nСчет - {club} [{scores[i]}] {opps[i]}\n\n" \
+                            return f"Результат последней игры:\n {last_result}\n\n" \
                                    f"Ближайшая игра клуба {club} против {opps[i]} состоится " \
                                    f"{parsed_date.strftime('%d.%m.%Y')} в {date_time[1]} (По МСК)"
                     elif len(date_time) > 1:
-                        return f"Ближайшая игра клуба {club} против {opps[i]} состоится" \
-                               f" {parsed_date.strftime('%d.%m.%Y')} в {date_time[1]} (По МСК)"
+                        return f"Результат последней игры: {last_result}\n\n" \
+                               f"Ближайшая игра клуба {club} против {opps[i]} состоится " \
+                               f"{parsed_date.strftime('%d.%m.%Y')} в {date_time[1]} (По МСК)"
+                        # return f"Ближайшая игра клуба {club} против {opps[i]} состоится" \
+                        #        f" {parsed_date.strftime('%d.%m.%Y')} в {date_time[1]} (По МСК)"
                     else:
                         return f"Ближайшая игра клуба {club} против {opps[i]} состоится " \
                                f"{parsed_date.strftime('%d.%m.%Y')}"
@@ -90,6 +95,16 @@ def check_place(soup, scores):
         if place == 'В гостях':
             scores[i + 1] = scores[i + 1][::-1]
     return scores
+
+
+def last_game_result(soup):
+    commands = []
+    score = []
+    for teams in soup.find('div', class_='commands').find_all('a'):
+        commands.append(teams.text.strip())
+    for i in soup.find('div', class_='score score-green').find_all('span'):  # orange, gray, red, green
+        score.append(i.text.strip())
+    return f"{commands[0]} [ {score[0]} : {score[1]} ] {commands[1]}"
 
 
 def send_date_of_match(club, team_tag) -> str:
