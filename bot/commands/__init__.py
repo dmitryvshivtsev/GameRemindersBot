@@ -9,8 +9,9 @@ from database.db_connection import Database
 from commands.get_info import get_date
 from commands.messages import text_msg
 from commands.help import help_call
-from keyboards.inline_menu import types_keyboard, choose_keyboard
 from commands.start import start
+from commands.last_match import last_match
+from keyboards.inline_menu import types_keyboard, choose_keyboard
 
 bot_commands = (
     ("start", "Нажми, чтобы начать", "Команда, которая начнет диалог и вывыедет навигацию по боту"),
@@ -24,6 +25,7 @@ bot_commands = (
 def register_user_commands(router: Router) -> None:
     router.message.register(start, Command(commands=['start']))
     router.message.register(types_keyboard, Command(commands=['edit_team']))
+    router.message.register(last_match, Command(commands=['last_match']))
     router.message.register(get_date, Command(commands=['get_date']))
     router.message.register(help_call, Command(commands=['help']))
     router.message.register(text_msg, F)
