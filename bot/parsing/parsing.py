@@ -102,8 +102,19 @@ def last_game_result(soup):
     score = []
     for teams in soup.find('div', class_='commands').find_all('a'):
         commands.append(teams.text.strip())
-    for i in soup.find('div', class_='score score-green').find_all('span'):  # orange, gray, red, green
-        score.append(i.text.strip())
+    # the next part must be rewritten!!
+    try:
+        board = soup.find('div', class_='score sco  re-gray').find_all('span')
+    except AttributeError:
+        try:
+            board = soup.find('div', class_='score score-green').find_all('span')
+        except AttributeError:
+            try:
+                board = soup.find('div', class_='score score-red').find_all('span')
+            except AttributeError:
+                board = soup.find('div', class_='score score-orange').find_all('span')
+    for num in board:
+        score.append(num.text.strip())
     return f"{commands[0]} [ {score[0]} : {score[1]} ] {commands[1]}"
 
 
