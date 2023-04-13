@@ -8,7 +8,7 @@ from database.db_connection import Database
 db = Database()
 
 
-async def types_keyboard(message: types.Message):
+async def types_keyboard(message: types.Message) -> None:
     builder = InlineKeyboardBuilder()
 
     types_of_sport = await db.get_types()
@@ -21,7 +21,7 @@ async def types_keyboard(message: types.Message):
     )
 
 
-async def choose_keyboard(call: types.CallbackQuery):
+async def choose_keyboard(call: types.CallbackQuery) -> None:
     global prev
     builder = InlineKeyboardBuilder()
     callback = call.data
