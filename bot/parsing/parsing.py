@@ -16,8 +16,6 @@ def get_match(club, team_tag):
     now = datetime.now()
     dates = parse_date(soup)
 
-    # scores = parse_score(soup)
-    # scores = check_place(soup, scores)
     opps = parse_opp(soup)
     last_result = last_game_result(soup)
     is_finish = finish_game(soup)
@@ -44,8 +42,6 @@ def get_match(club, team_tag):
                         return f"Результат последней игры: {last_result}\n\n" \
                                f"Ближайшая игра клуба {club} против {opps[i]} состоится " \
                                f"{parsed_date.strftime('%d.%m.%Y')} в {date_time[1]} (По МСК)"
-                        # return f"Ближайшая игра клуба {club} против {opps[i]} состоится" \
-                        #        f" {parsed_date.strftime('%d.%m.%Y')} в {date_time[1]} (По МСК)"
                     else:
                         return f"Ближайшая игра клуба {club} против {opps[i]} состоится " \
                                f"{parsed_date.strftime('%d.%m.%Y')}"
@@ -71,6 +67,7 @@ def parse_opp(soup):
     return new_opps
 
 
+# is it necessary?
 def parse_score(soup):
     scores = []
     for score in soup.find_all('td', class_='score-td'):
@@ -86,6 +83,7 @@ def finish_game(soup):
     return is_finish
 
 
+# this must be rewritten
 def check_place(soup, scores):
     where_game = []
     for place in soup.find_all('td', class_='alRight padR20'):
@@ -93,7 +91,7 @@ def check_place(soup, scores):
             where_game.append(place.text.strip())
     for i, place in enumerate(where_game):
         if place == 'В гостях':
-            scores[i + 1] = scores[i + 1][::-1]
+            pass
     return scores
 
 
