@@ -7,7 +7,7 @@ from datetime import datetime, date
 from database.db_connection import Database
 
 
-def get_match(club, team_tag):
+def get_match(club: str, team_tag: str) -> str:
     url = f'https://www.sports.ru/{team_tag}/calendar'
     response = requests.get(url=url)
     response.encoding = 'utf-8'
@@ -29,8 +29,6 @@ def get_match(club, team_tag):
                 cur_day, cur_month, cur_year = map(int, elems)
                 parsed_date = date(cur_year, cur_month, cur_day)
                 now_time = datetime.now().strftime("%H:%M")
-                now_date = datetime.now().strftime("%d.%m.%Y")
-
                 if (parsed_date.month == now.month and parsed_date.day >= now.day) or \
                         (parsed_date.month > now.month and parsed_date.year >= now.year):
                     if date_time[1] <= now_time:
@@ -48,7 +46,7 @@ def get_match(club, team_tag):
                                f"{parsed_date.strftime('%d.%m.%Y')}"
 
 
-def parse_date(soup):
+def parse_date(soup: BeautifulSoup) -> list:
     dates = []
     for date_ in soup.find_all('td', class_='name-td alLeft bordR'):
         if not date_.text.isalpha():
@@ -57,7 +55,7 @@ def parse_date(soup):
     return dates
 
 
-def parse_opp(soup):
+def parse_opp(soup: BeautifulSoup) -> list:
     opps = []
     for opp in soup.find_all('div', class_='hide-field'):
         opps.append(opp.text.strip())
@@ -69,14 +67,14 @@ def parse_opp(soup):
 
 
 # is it necessary?
-def parse_score(soup):
+def parse_score(soup: BeautifulSoup) -> list:
     scores = []
     for score in soup.find_all('td', class_='score-td'):
         scores.append(score.text.strip())
     return scores
 
 
-def finish_game(soup):
+def finish_game(soup: BeautifulSoup) -> bool:
     is_finish = False
     for st in soup.find('div', class_='score-descr'):
         if st.text.strip() == 'завершен':
@@ -85,7 +83,7 @@ def finish_game(soup):
 
 
 # this must be rewritten
-def check_place(soup, scores):
+def check_place(soup: BeautifulSoup, scores: list) -> list:
     where_game = []
     for place in soup.find_all('td', class_='alRight padR20'):
         if place.text.strip():
@@ -96,12 +94,11 @@ def check_place(soup, scores):
     return scores
 
 
-def last_game_result(soup: BeautifulSoup, is_finish: bool):
+def last_game_result(soup: BeautifulSoup, is_finish: bool) -> str:
     commands = []
     score = []
     for teams in soup.find('div', class_='commands').find_all('a'):
         commands.append(teams.text.strip())
-    # the next part must be rewritten!!
     if is_finish:
         try:
             board = soup.find('div', class_='score score-green').find_all('span')
@@ -117,5 +114,5 @@ def last_game_result(soup: BeautifulSoup, is_finish: bool):
     return f"{commands[0]} [ {score[0]} : {score[1]} ] {commands[1]}"
 
 
-def send_date_of_match(club, team_tag) -> str:
+def send_date_of_match(club: str, team_tag: str) -> str:
     return get_match(club, team_tag)
