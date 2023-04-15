@@ -85,6 +85,20 @@ class Database:
             [result.append(*res) for res in query]
             return result
 
+    def get_arrs(self):
+        with self.connection:
+            self.cursor.execute("SELECT team_id_arr FROM users;")
+            result = []
+            query = self.cursor.fetchall()
+            [result.append(*res) for res in query]
+            return result
+
+    def add_to_arr(self, idx, tg_id):
+        with self.connection:
+            self.cursor.execute("UPDATE users SET team_id_arr = (SELECT team_id_arr FROM users WHERE tg_id = %s) || %s"
+                                " WHERE tg_id = %s", (tg_id, idx, tg_id))
+
     # def add_commands(self, sport, league, team, tag):
     #     with self.connection:
-    #         return self.cursor.execute("INSERT INTO teams (kind_of_sport, league, team, team_tag) VALUES (%s, %s, %s, %s) ON CONFLICT DO NOTHING;", (sport, league, team, tag))
+    #         return self.cursor.execute("INSERT INTO teams (kind_of_sport, league, team, team_tag)
+    #         VALUES (%s, %s, %s, %s) ON CONFLICT DO NOTHING;", (sport, league, team, tag))

@@ -7,7 +7,7 @@ from database.db_connection import Database
 from keyboards.inline import types_keyboard, choose_keyboard
 
 
-async def show_menu(message: types.Message):
+async def show_menu(message: types.Message) -> None:
     db = Database()
     exist = asyncio.create_task(db.user_exists(tg_id=message.from_user.id))
     if not (await exist):
