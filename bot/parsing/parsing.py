@@ -17,8 +17,8 @@ def get_match(club, team_tag):
     dates = parse_date(soup)
 
     opps = parse_opp(soup)
-    last_result = last_game_result(soup)
     is_finish = finish_game(soup)
+    last_result = last_game_result(soup=soup, is_finish=is_finish)
 
     for i, date_time in enumerate(dates):
         # Формат на сайте лежит в виде "Дата | Время" или "Дата"
@@ -28,16 +28,17 @@ def get_match(club, team_tag):
             if not elems[0].isalpha():
                 cur_day, cur_month, cur_year = map(int, elems)
                 parsed_date = date(cur_year, cur_month, cur_day)
+                now_time = datetime.now().strftime("%H:%M")
+                now_date = datetime.now().strftime("%d.%m.%Y")
+
                 if (parsed_date.month == now.month and parsed_date.day >= now.day) or \
                         (parsed_date.month > now.month and parsed_date.year >= now.year):
-                    now_time = datetime.now().strftime("%H:%M")
                     if date_time[1] <= now_time:
                         if not is_finish:
                             return f"Матч идет!\nСчет - {last_result}"
                         if is_finish:
                             return f"Результат последней игры:\n {last_result}\n\n" \
-                                   f"Ближайшая игра клуба {club} против {opps[i]} состоится " \
-                                   f"{parsed_date.strftime('%d.%m.%Y')} в {date_time[1]} (По МСК)"
+                                   f"Завтра сообщу тебе о следующем матче! 🔔"
                     elif len(date_time) > 1:
                         return f"Результат последней игры: {last_result}\n\n" \
                                f"Ближайшая игра клуба {club} против {opps[i]} состоится " \
@@ -95,15 +96,13 @@ def check_place(soup, scores):
     return scores
 
 
-def last_game_result(soup):
+def last_game_result(soup: BeautifulSoup, is_finish: bool):
     commands = []
     score = []
     for teams in soup.find('div', class_='commands').find_all('a'):
         commands.append(teams.text.strip())
     # the next part must be rewritten!!
-    try:
-        board = soup.find('div', class_='score sco  re-gray').find_all('span')
-    except AttributeError:
+    if is_finish:
         try:
             board = soup.find('div', class_='score score-green').find_all('span')
         except AttributeError:
@@ -111,6 +110,8 @@ def last_game_result(soup):
                 board = soup.find('div', class_='score score-red').find_all('span')
             except AttributeError:
                 board = soup.find('div', class_='score score-orange').find_all('span')
+    else:
+        board = soup.find('div', class_='score score-gray').find_all('span')
     for num in board:
         score.append(num.text.strip())
     return f"{commands[0]} [ {score[0]} : {score[1]} ] {commands[1]}"
