@@ -31,14 +31,14 @@ def get_match(club: str, team_tag: str) -> str:
                 now_time = datetime.now().strftime("%H:%M")
                 if (parsed_date.month == now.month and parsed_date.day >= now.day) or \
                         (parsed_date.month > now.month and parsed_date.year >= now.year):
-                    if date_time[1] <= now_time:
+                    if date_time[1] <= now_time and parsed_date.day == now.day:
                         if not is_finish:
                             return f"Матч идет!\nСчет - {last_result}"
                         if is_finish:
-                            return f"Результат последней игры:\n {last_result}\n\n" \
+                            return f"Результат последней игры:\n{last_result}\n\n" \
                                    f"Завтра сообщу тебе о следующем матче! 🔔"
                     elif len(date_time) > 1:
-                        return f"Результат последней игры: {last_result}\n\n" \
+                        return f"Результат последней игры:\n{last_result}\n\n" \
                                f"Ближайшая игра клуба {club} против {opps[i]} состоится " \
                                f"{parsed_date.strftime('%d.%m.%Y')} в {date_time[1]} (По МСК)"
                     else:
