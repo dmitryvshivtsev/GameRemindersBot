@@ -35,7 +35,10 @@ class Database:
 
     async def get_favourite_team(self, tg_id: int):
         with self.connection:
-            return self.cursor.execute("SELECT team FROM teams WHERE tg_id = %s;", (tg_id,))
+            try:
+                return self.cursor.execute("SELECT team FROM teams t INNER JOIN users u on t.id = u.team_id WHERE tg_id = %s;", (tg_id,)).fetchall()
+            except AttributeError:
+                return False
 
     async def get_user_id(self, tg_username: str):
         with self.connection:
@@ -75,7 +78,10 @@ class Database:
             result = []
             query = self.cursor.fetchall()
             [result.append(i) for res in query for i in res]
-            return result
+            if len(result) == 2:
+                return result
+            else:
+                return [False, False]
 
     def get_all_tg_id(self):
         with self.connection:
@@ -97,6 +103,11 @@ class Database:
         with self.connection:
             self.cursor.execute("UPDATE users SET team_id_arr = (SELECT team_id_arr FROM users WHERE tg_id = %s) || %s"
                                 " WHERE tg_id = %s", (tg_id, idx, tg_id))
+
+
+    def clear_favourite_team(self, tg_id):
+        with self.connection:
+            self.cursor.execute("UPDATE users SET team_id = %s WHERE tg_id = %s", (None, tg_id))
 
     # def add_commands(self, sport, league, team, tag):
     #     with self.connection:
