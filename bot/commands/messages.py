@@ -1,4 +1,4 @@
-from aiogram import Router, F,  types
+from aiogram import types
 
 
 async def text_msg(message: types.Message) -> None:

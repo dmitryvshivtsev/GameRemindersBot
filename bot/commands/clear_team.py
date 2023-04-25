@@ -1,10 +1,4 @@
-import os
-import time
-
-import requests
-import schedule
 from aiogram import types
-
 from database.db_connection import Database
 
 
