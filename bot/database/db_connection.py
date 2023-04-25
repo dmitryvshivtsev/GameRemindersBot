@@ -36,8 +36,11 @@ class Database:
     async def get_favourite_team(self, tg_id: int):
         with self.connection:
             try:
-                return self.cursor.execute("SELECT team FROM teams t INNER JOIN users u on t.id = u.team_id WHERE tg_id = %s;", (tg_id,)).fetchall()
-            except AttributeError:
+                self.cursor.execute("SELECT team FROM teams t INNER JOIN users u on t.id = u.team_id "
+                                    "WHERE tg_id = %s;", (tg_id,))
+                query = self.cursor.fetchall()[0]
+                return query[0]
+            except IndexError or AttributeError:
                 return False
 
     async def get_user_id(self, tg_username: str):
@@ -74,10 +77,12 @@ class Database:
 
     def get_all_tags(self, tg_id: int):
         with self.connection:
-            self.cursor.execute("SELECT DISTINCT team, team_tag FROM teams WHERE id = (SELECT team_id FROM users WHERE tg_id = %s);", (tg_id,))
+            self.cursor.execute("SELECT DISTINCT team, team_tag FROM teams "
+                                "WHERE id = (SELECT team_id FROM users WHERE tg_id = %s);", (tg_id,))
             result = []
             query = self.cursor.fetchall()
             [result.append(i) for res in query for i in res]
+            # If
             if len(result) == 2:
                 return result
             else:
