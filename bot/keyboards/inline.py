@@ -1,5 +1,3 @@
-import os
-
 from aiogram import types
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 from database.db_connection import Database
@@ -7,23 +5,31 @@ from database.db_connection import Database
 db = Database()
 
 
-async def types_keyboard(message: types.Message) -> None:
+async def main_menu(message: types.Message) -> None:
     builder = InlineKeyboardBuilder()
-    types_of_sport = await db.get_all_types()
-    for kind in types_of_sport:
-        builder.button(text=kind, callback_data=kind)
+    builder.button(text="Добавить команду", callback_data="add_team")
+    builder.button(text="Удалить команду", callback_data="del_team")
     builder.adjust(1)
     await message.answer(
-        text=f"Выбери вид спорта 🏅",
+        text="Что ты хочешь сделать?",
         reply_markup=builder.as_markup()
     )
 
 
-async def choose_keyboard(call: types.CallbackQuery) -> None:
+async def edit_team_keyboard(call: types.CallbackQuery) -> None:
     global prev
     builder = InlineKeyboardBuilder()
     callback = call.data
-    if call.data in await db.get_all_types():
+    if call.data == "add_team":
+        types_of_sport = await db.get_all_types()
+        for kind in types_of_sport:
+            builder.button(text=kind, callback_data=kind)
+        builder.adjust(1)
+        await call.message.edit_text(
+            text=f"Выбери вид спорта 🏅",
+            reply_markup=builder.as_markup()
+        )
+    elif call.data in await db.get_all_types():
         prev = callback
         leagues = await db.get_all_leagues(kind=callback)
         for league in leagues:
