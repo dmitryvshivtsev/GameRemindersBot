@@ -16,7 +16,7 @@ async def main_menu(message: types.Message) -> None:
     )
 
 
-async def edit_team_keyboard(call: types.CallbackQuery) -> None:
+async def add_team_keyboard(call: types.CallbackQuery) -> None:
     global prev
     builder = InlineKeyboardBuilder()
     callback = call.data
@@ -29,7 +29,7 @@ async def edit_team_keyboard(call: types.CallbackQuery) -> None:
             text=f"Выбери вид спорта 🏅",
             reply_markup=builder.as_markup()
         )
-    elif call.data in await db.get_all_types():
+    elif callback in await db.get_all_types():
         prev = callback
         leagues = await db.get_all_leagues(kind=callback)
         for league in leagues:
@@ -39,20 +39,22 @@ async def edit_team_keyboard(call: types.CallbackQuery) -> None:
             text=f"Ты выбрал {callback.lower()}. Теперь выбери лигу ⬇",
             reply_markup=builder.as_markup()
         )
+    elif callback in await db.get_all_teams(prev):
+        await db.set_favourite_team(tg_id=call.from_user.id, favourite_team=call.data)
+        await call.message.edit_text(text=f"Ты болеешь за {callback}. Круто! 😍\nЯ это запомнил и буду тебя "
+                                          f"уведомлять о предстоящих матчах ежедневно в 9:00 и 21:00 🕘\n"
+                                          f"А когда матч закончится, я сообщу тебе счёт 🔊")
     else:
         teams = await db.get_all_teams(callback)
         for team in teams:
             builder.button(text=team, callback_data=team)
         builder.adjust(1)
-        if callback in await db.get_all_teams(prev):
-            await db.set_favourite_team(tg_id=call.from_user.id, favourite_team=call.data)
-            await call.message.edit_text(text=f"Ты болеешь за {callback}. Круто! 😍\nЯ это запомнил и буду тебя "
-                                              f"уведомлять о предстоящих матчах ежедневно в 9:00 и 21:00 🕘\n"
-                                              f"А когда матч закончится, я сообщу тебе счёт 🔊")
-        else:
-            await call.message.edit_text(
-                text=f"Ты выбрал {callback}. Теперь выбери команду ⬇",
-                reply_markup=builder.as_markup()
-            )
+        await call.message.edit_text(
+            text=f"Ты выбрал {callback}. Теперь выбери команду ⬇",
+            reply_markup=builder.as_markup()
+        )
     prev = call.data
 
+
+async def del_team_keyboard(call: types.CallbackQuery) -> None:
+    await call.message.edit_text(text="Удаление команд пока в разработке")

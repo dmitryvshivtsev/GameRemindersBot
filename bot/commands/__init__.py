@@ -2,14 +2,14 @@ __all__ = ['register_user_commands', 'bot_commands', 'menu_inline']
 
 
 from aiogram import Router, F
-from aiogram.filters import Command
+from aiogram.filters import Command, callback_data
 from commands.get_info import get_date
 from commands.messages import text_msg
 from commands.help import help_call
 from commands.start import start
 from commands.favourite_team import favourite_team
 from commands.clear_team import clear_team
-from keyboards.inline import main_menu, edit_team_keyboard
+from keyboards.inline import main_menu, add_team_keyboard, del_team_keyboard
 
 bot_commands = (
     ("start", "Нажми, чтобы начать", "Команда, которая начнет диалог и вывыедет навигацию по боту"),
@@ -32,4 +32,4 @@ def register_user_commands(router: Router) -> None:
 
 
 async def menu_inline(router: Router) -> None:
-    router.callback_query.register(edit_team_keyboard)
+    router.callback_query.register(add_team_keyboard)
