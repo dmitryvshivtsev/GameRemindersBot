@@ -30,9 +30,9 @@ async def main() -> None:
 
     menu = create_task(menu_inline(dp))
     start_poll = create_task(dp.start_polling(bot))
+    user_commands = create_task(register_user_commands(dp))
 
-    register_user_commands(dp)
-
+    await user_commands
     await menu
     await start_poll
 
