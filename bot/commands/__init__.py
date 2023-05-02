@@ -9,7 +9,11 @@ from commands.help import help_call
 from commands.start import start
 from commands.favourite_team import favourite_team
 from commands.clear_team import clear_team
-from keyboards.inline import main_menu, add_team_keyboard, del_team_keyboard
+from keyboards.inline import main_menu, select_team_keyboard, del_team_keyboard
+from database.db_connection import Database
+
+db = Database()
+
 
 bot_commands = (
     ("start", "Нажми, чтобы начать", "Команда, которая начнет диалог и вывыедет навигацию по боту"),
@@ -32,4 +36,4 @@ def register_user_commands(router: Router) -> None:
 
 
 async def menu_inline(router: Router) -> None:
-    router.callback_query.register(add_team_keyboard)
+    router.callback_query.register(select_team_keyboard)
