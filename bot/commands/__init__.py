@@ -2,7 +2,9 @@ __all__ = ['register_user_commands', 'bot_commands', 'menu_inline']
 
 
 from aiogram import Router, F
-from aiogram.filters import Command, callback_data
+from aiogram.filters import Command
+
+from callback_data_states import MyCallbackData
 from commands.get_info import get_date
 from commands.messages import text_msg
 from commands.help import help_call
@@ -25,7 +27,7 @@ bot_commands = (
 )
 
 
-def register_user_commands(router: Router) -> None:
+async def register_user_commands(router: Router) -> None:
     router.message.register(start, Command(commands=['start']))
     router.message.register(main_menu, Command(commands=['edit_team']))
     router.message.register(favourite_team, Command(commands=['favourite_team']))
@@ -36,4 +38,4 @@ def register_user_commands(router: Router) -> None:
 
 
 async def menu_inline(router: Router) -> None:
-    router.callback_query.register(select_team_keyboard)
+    router.callback_query.register(select_team_keyboard, MyCallbackData.filter())
