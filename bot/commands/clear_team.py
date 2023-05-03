@@ -1,5 +1,5 @@
 from aiogram import types
-from database.db_connection import Database
+from database.db_queries import Database
 
 
 async def clear_team(message: types.Message) -> None:

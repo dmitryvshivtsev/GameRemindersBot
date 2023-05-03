@@ -1,6 +1,6 @@
 from aiogram.filters.callback_data import CallbackData
 
 
-class MyCallbackData(CallbackData, prefix="test"):
+class MyCallbackData(CallbackData, prefix="my"):
     cb: str
-    status: int
+    status: str

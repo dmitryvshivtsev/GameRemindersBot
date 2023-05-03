@@ -3,7 +3,7 @@ import time
 import requests
 
 from aiogram import types
-from database.db_connection import Database
+from database.db_queries import Database
 from parsing.parsing import send_date_of_match
 
 

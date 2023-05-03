@@ -10,7 +10,7 @@ from aiogram import Dispatcher, Bot
 from aiogram.types import BotCommand
 from commands import register_user_commands, bot_commands, menu_inline
 from commands.get_info import auto_get_date
-from database.db_connection import Database
+from database.db_queries import Database
 
 
 async def main() -> None:

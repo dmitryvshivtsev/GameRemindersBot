@@ -2,7 +2,7 @@ import asyncio
 import os
 
 from aiogram import types
-from database.db_connection import Database
+from database.db_queries import Database
 
 
 async def start(message: types.Message) -> None:
