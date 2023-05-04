@@ -14,6 +14,7 @@ class Status(enum.Enum):
     selected_league = 'selected_league'
     selected_team = 'selected_team'
     del_team = 'del_team'
+    selected_del_team = 'selected_del_team'
 
 
 async def main_menu(message: types.Message) -> None:
@@ -71,12 +72,24 @@ async def select_team(query: types.CallbackQuery, callback_data: MyCallbackData)
 
 async def set_team(query: types.CallbackQuery, callback_data: MyCallbackData) -> None:
     """Writes to database user's favourite team"""
-    await db.set_favourite_team(tg_id=query.from_user.id, favourite_team=callback_data.cb)
+    await db.add_favourite_team(tg_id=query.from_user.id, favourite_team=callback_data.cb)
     await query.message.edit_text(text=f"Ты болеешь за {callback_data.cb}. Круто! 😍\nЯ это запомнил и буду тебя "
                                           f"уведомлять о предстоящих матчах ежедневно в 9:00 и 21:00 🕘\n"
                                           f"А когда матч закончится, я сообщу тебе счёт 🔊")
 
 
 async def del_team_keyboard(query: types.CallbackQuery) -> None:
-    await query.message.edit_text(text="Удаление команд пока в разработке")
+    builder = InlineKeyboardBuilder()
+    result = db.get_all_tags(query.from_user.id)
+    for club, team_tag in result:
+        builder.button(text=club, callback_data=MyCallbackData(cb=club, status=Status.selected_del_team.value).pack())
+    builder.adjust(1)
+    await query.message.edit_text(
+        text=f"Выбери клуб, который хочешь убрать из списка любимых",
+        reply_markup=builder.as_markup()
+    )
 
+
+async def del_team(query: types.CallbackQuery, callback_data: MyCallbackData):
+    await db.del_favourite_team(tg_id=query.from_user.id, favourite_team=callback_data.cb)
+    await query.message.edit_text(text=f"Команда {callback_data.cb} удалена из списка любимых")

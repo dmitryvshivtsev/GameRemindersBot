@@ -9,7 +9,7 @@ from parsing.parsing import send_date_of_match
 
 async def get_date(message: types.Message) -> None:
     db = Database()
-    result = await db.get_all_tags(message.from_user.id)
+    result = db.get_all_tags(message.from_user.id)
     for club, team_tag in result:
         if club and team_tag:
             try:
@@ -23,8 +23,8 @@ async def get_date(message: types.Message) -> None:
 
 def auto_get_date() -> None:
     db = Database()
-    for id_ in await db.get_all_tg_id():
-        result = await db.get_all_tags(id_)
+    for id_ in db.get_all_tg_id():
+        result = db.get_all_tags(id_)
         for club, team_tag in result:
             if club and team_tag:
                 try:
