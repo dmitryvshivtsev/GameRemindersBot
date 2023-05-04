@@ -2,7 +2,7 @@ import enum
 from aiogram import types
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
-from callback_data_states import MyCallbackData
+from commands.callback_data_states import MyCallbackData
 from database.db_queries import Database
 
 db = Database()

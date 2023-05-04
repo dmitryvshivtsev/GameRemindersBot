@@ -4,7 +4,7 @@ __all__ = ['register_user_commands', 'bot_commands', 'menu_inline']
 from aiogram import Router, F
 from aiogram.filters import Command
 
-from callback_data_states import MyCallbackData
+from commands.callback_data_states import MyCallbackData
 from commands.get_info import get_date
 from commands.help import help_call
 from commands.messages import text_msg
