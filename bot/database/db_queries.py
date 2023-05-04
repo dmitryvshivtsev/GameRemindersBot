@@ -94,6 +94,8 @@ class Database:
 
     def get_all_tags(self, tg_id: int):
         fav_teams_id = self.get_all_user_teams_id(tg_id)
+        if not fav_teams_id:
+            return [False, False]
         result = []
         with self.connection:
             for team_id in fav_teams_id[0]:
@@ -118,11 +120,6 @@ class Database:
             query = self.cursor.fetchall()
             [result.append(*res) for res in query]
             return result
-
-    async def clear_favourite_team(self, tg_id):
-        with self.connection:
-            self.cursor.execute("UPDATE users SET team_id = %s "
-                                "WHERE tg_id = %s", (None, tg_id))
 
     # def add_commands(self, sport, league, team, tag):
     #     with self.connection:

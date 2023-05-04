@@ -15,6 +15,7 @@ class Status(enum.Enum):
     selected_team = 'selected_team'
     del_team = 'del_team'
     selected_del_team = 'selected_del_team'
+    show_user_teams = 'show_user_teams'
 
 
 async def main_menu(message: types.Message) -> None:
@@ -22,6 +23,8 @@ async def main_menu(message: types.Message) -> None:
     builder = InlineKeyboardBuilder()
     builder.button(text="Добавить команду", callback_data=MyCallbackData(cb="add_team",
                                                                          status=Status.add_team.value).pack())
+    builder.button(text="Вывести мои команды", callback_data=MyCallbackData(cb="show_user_teams",
+                                                                    status=Status.show_user_teams.value).pack())
     builder.button(text="Удалить команду", callback_data=MyCallbackData(cb="del_team",
                                                                         status=Status.del_team.value).pack())
     builder.adjust(1)
@@ -90,6 +93,14 @@ async def del_team_keyboard(query: types.CallbackQuery) -> None:
     )
 
 
-async def del_team(query: types.CallbackQuery, callback_data: MyCallbackData):
+async def del_team(query: types.CallbackQuery, callback_data: MyCallbackData) -> None:
     await db.del_favourite_team(tg_id=query.from_user.id, favourite_team=callback_data.cb)
     await query.message.edit_text(text=f"Команда {callback_data.cb} удалена из списка любимых")
+
+
+async def show_teams(query: types.CallbackQuery) -> None:
+    result = db.get_all_tags(query.from_user.id)
+    teams = ''
+    for club, team_tag in result:
+        teams += club + '\n'
+    await query.message.edit_text(text=f'Твои любимые команды:\n{teams}')
