@@ -84,21 +84,19 @@ class Database:
             [result.append(*res) for res in query]
             return result
 
-    def get_all_tags(self, tg_id: int):
+    async def get_all_tags(self, tg_id: int):
+        fav_teams_id = await self.get_arr(tg_id)
+        result = []
         with self.connection:
-            self.cursor.execute("SELECT DISTINCT team, team_tag FROM teams "
-                                "WHERE id = (SELECT team_id "
-                                "FROM users WHERE tg_id = %s);", (tg_id,))
-            result = []
-            query = self.cursor.fetchall()
-            [result.append(i) for res in query for i in res]
-            # If
-            if len(result) == 2:
-                return result
-            else:
-                return [False, False]
+            for team_id in fav_teams_id[0]:
+                self.cursor.execute("SELECT DISTINCT team, team_tag FROM teams "
+                                    "WHERE id = %s;", (team_id,))
+                query = self.cursor.fetchall()
+                result.append(*query)
+            return result
 
-    def get_all_tg_id(self):
+
+    async def get_all_tg_id(self):
         with self.connection:
             self.cursor.execute("SELECT tg_id FROM users;")
             result = []
@@ -106,21 +104,27 @@ class Database:
             [result.append(*res) for res in query]
             return result
 
-    def get_arrs(self):
+    async def get_arr(self, tg_id):
         with self.connection:
-            self.cursor.execute("SELECT team_id_arr FROM users;")
+            self.cursor.execute("SELECT team_id_arr FROM users WHERE tg_id = %s;", (tg_id,))
             result = []
             query = self.cursor.fetchall()
             [result.append(*res) for res in query]
             return result
 
-    def add_to_arr(self, idx, tg_id):
+    async def add_to_arr(self, idx, tg_id):
         with self.connection:
             self.cursor.execute("UPDATE users "
                                 "SET team_id_arr = (SELECT team_id_arr FROM users WHERE tg_id = %s) || %s "
-                                "WHERE tg_id = %s", (tg_id, idx, tg_id))
+                                "WHERE tg_id = %s;", (tg_id, idx, tg_id))
 
-    def clear_favourite_team(self, tg_id):
+    async def del_from_arr(self, idx, tg_id):
+        with self.connection:
+            self.cursor.execute("UPDATE users "
+                                "SET team_id_arr = (SELECT array_remove((SELECT team_id_arr FROM users WHERE tg_id = %s), %s))"
+                                "WHERE tg_id = %s;", (tg_id, idx, tg_id))
+
+    async def clear_favourite_team(self, tg_id):
         with self.connection:
             self.cursor.execute("UPDATE users SET team_id = %s "
                                 "WHERE tg_id = %s", (None, tg_id))

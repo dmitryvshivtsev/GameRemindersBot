@@ -4,8 +4,6 @@ import lxml
 import re
 from datetime import datetime, date
 
-from database.db_connection import Database
-
 
 def get_match(club: str, team_tag: str) -> str:
     url = f'https://www.sports.ru/{team_tag}/calendar'
@@ -51,7 +49,6 @@ def parse_date(soup: BeautifulSoup) -> list:
     for date_ in soup.find_all('td', class_='name-td alLeft bordR'):
         if not date_.text.isalpha():
             dates.append(date_.text.strip())
-
     return dates
 
 
