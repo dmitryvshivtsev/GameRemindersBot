@@ -27,14 +27,15 @@ def auto_get_date() -> None:
         result = db.get_all_tags(id_)
         for club, team_tag in result:
             if club and team_tag:
-                try:
-                    url = f"https://api.telegram.org/bot{os.getenv('TOKEN')}" \
-                          f"/sendMessage?chat_id={id_}&" \
-                          f"text={send_date_of_match(club, team_tag)}"
-                except:
+                match_info = send_date_of_match(club, team_tag)
+                if not match_info:
                     url = f"https://api.telegram.org/bot{os.getenv('TOKEN')}" \
                           f"/sendMessage?chat_id={id_}&" \
                           f"text='К сожалению, на ближайшие дни у клуба {club} нет матчей 😿\n" \
                           f"Если появятся, то я тебе сообщу 🔔'"
+                else:
+                    url = f"https://api.telegram.org/bot{os.getenv('TOKEN')}" \
+                          f"/sendMessage?chat_id={id_}&" \
+                          f"text={match_info}"
                 requests.get(url)
                 time.sleep(0.5)

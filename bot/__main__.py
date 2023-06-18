@@ -12,8 +12,13 @@ from commands import register_user_commands, bot_commands, menu_inline
 from commands.get_info import auto_get_date
 from database.db_queries import Database
 
+import os
+from dotenv import load_dotenv
+from pathlib import Path
+
 
 async def main() -> None:
+    load_dotenv()
     logging.basicConfig(level=logging.DEBUG)
 
     commands_for_bot = []
