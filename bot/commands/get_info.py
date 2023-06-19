@@ -31,8 +31,8 @@ def auto_get_date() -> None:
                 if not match_info:
                     url = f"https://api.telegram.org/bot{os.getenv('TOKEN')}" \
                           f"/sendMessage?chat_id={id_}&" \
-                          f"text='К сожалению, на ближайшие дни у клуба {club} нет матчей 😿\n" \
-                          f"Если появятся, то я тебе сообщу 🔔'"
+                          f"text=К сожалению, на ближайшие дни у клуба {club} нет матчей 😿\n" \
+                          f"Если появятся, то я тебе сообщу 🔔"
                 else:
                     url = f"https://api.telegram.org/bot{os.getenv('TOKEN')}" \
                           f"/sendMessage?chat_id={id_}&" \
