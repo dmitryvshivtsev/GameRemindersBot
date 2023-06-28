@@ -9,10 +9,15 @@
 * Получение итогового счета после окончания матча;
 * Добавление нескольких любимых команд (и удаление);
 
-Example: \
-<img src="/images/edit_team_1.png" alt="example_bot" width="600"/> \
-<img src="/images/edit_team_2.png" alt="example_bot2" width="600"/> \
-<img src="/images/get_date.png" alt="example_bot3" width="600"/>
+Пример: \
+Ты можешь получить результаты матчей твоих любимых команд (включая матчи, которые идут прямо сейчас!) : \
+<img src="/images/get_date_1.png" alt="example_bot" width="600"/> \
+Также ты будешь получать результаты игр автоматически в 9:00 и 21:00: \
+<img src="/images/get_date_2.png" alt="example_bot2" width="600"/> \
+Ты можешь добавлять, удалять и просматривать команды в любое время: \
+<img src="/images/edit_team.png" alt="example_bot3" width="600"/>
+Для этой цели у бота есть удобная клавиатура: \
+<img src="/images/edit_team_1.png" alt="example_bot4" width="600"/> \
 
 Планируется реализовать:
 * Автоматическое уведомление с результатом игры после её окончания;
