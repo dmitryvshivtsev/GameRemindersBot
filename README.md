@@ -10,14 +10,14 @@ In this version, the bot has the following functionality:
 * Adding several favorite teams (and removing them);
 
 Example: \
-You can get game results for your favorite teams (including games going on right now!): \
+- You can get game results for your favorite teams (including games going on right now!): \
 <img src="/images/get_date_1.png" alt="example_bot" width="600"/> \
-You will also get results every day at 9 a.m. and 9 p.m: \
+- You will also get results every day at 9 a.m. and 9 p.m: \
 <img src="/images/get_date_2.png" alt="example_bot2" width="600"/> \
-You can check, delete, or add any team at any time: \
+- You can check, delete, or add any team at any time: \
 <img src="/images/edit_team.png" alt="example_bot3" width="600"/>
-The bot has user-friendly keyboard for this purpose: \
-<img src="/images/edit_team_1.png" alt="example_bot4" width="600"/> \
+- The bot has user-friendly keyboard for this purpose: \
+<img src="/images/edit_team_1.png" alt="example_bot4" width="600"/>
 
 Plans to implement:
 * Automatic notification with the result of the game after its completion;
